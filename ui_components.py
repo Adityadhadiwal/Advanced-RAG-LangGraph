@@ -10,7 +10,7 @@ from utils import format_file_size
 
 
 def setup_page_config():
-    """Configure Streamlit page settings"""
+    """Sets up Streamlit page settings"""
     st.set_page_config(
         page_title=PAGE_TITLE, 
         page_icon=PAGE_ICON,
@@ -20,7 +20,7 @@ def setup_page_config():
 
 
 def render_header():
-    """Render the main header section"""
+    """Shows the main header section"""
     st.title(f"{PAGE_ICON} Advanced RAG System")
     st.subheader("Intelligent Document Search & Analysis")
     
@@ -40,7 +40,7 @@ def render_header():
 
 
 def render_sidebar(document_loader):
-    """Render the sidebar with app info and file types"""
+    """Shows the sidebar with app info and file types"""
     with st.sidebar:
         # App info
         st.markdown("""
@@ -60,7 +60,7 @@ def render_sidebar(document_loader):
 
 
 def render_upload_section(document_loader):
-    """Render the document upload section"""
+    """Shows the document upload section"""
     st.markdown("## 📤 Document Upload")
     
     # Upload area with simple styling
@@ -86,7 +86,7 @@ def render_upload_section(document_loader):
 
 
 def render_file_analysis(file_info):
-    """Render file analysis metrics"""
+    """Shows file analysis metrics"""
     st.markdown("### 📊 File Analysis")
     
     col1, col2, col3, col4 = st.columns(4)
@@ -112,7 +112,7 @@ def render_file_analysis(file_info):
 
 
 def render_upload_placeholder():
-    """Render placeholder when no file is uploaded"""
+    """Shows placeholder when no file is uploaded"""
     st.markdown(f"""
     <div style="text-align: center; padding: 3rem; background: #f8fafc; border-radius: 10px; margin: 2rem 0;">
         <h3>{UPLOAD_PLACEHOLDER_TITLE}</h3>
@@ -122,7 +122,7 @@ def render_upload_placeholder():
 
 
 def render_question_section(user_file):
-    """Render the question input section"""
+    """Shows the question input section"""
     st.markdown("---")
     st.markdown("### 💬 Ask Questions About Your Document")
     
@@ -151,7 +151,7 @@ def render_question_section(user_file):
 
 
 def render_answer_section(result):
-    """Render the answer section"""
+    """Shows the answer section"""
     st.markdown("### 📝 Answer")
     st.success(result['solution'])
     st.markdown("---")
