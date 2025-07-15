@@ -9,34 +9,83 @@ load_dotenv()
 llm = ChatOpenAI(temperature=0)
 
 class EvaluateDocs(BaseModel):
-
+    """Model for document evaluation results"""
+    
     score: str = Field(
-        description="Documents are relevant to the question, 'yes' or 'no'"
+        description="Whether documents are relevant to the question - 'yes' if sufficient, 'no' if insufficient"
+    )
+    
+    relevance_score: float = Field(
+        default=0.5,
+        description="Relevance score between 0.0 and 1.0 indicating how well documents match the query",
+        ge=0.0,
+        le=1.0
+    )
+    
+    coverage_assessment: str = Field(
+        default="",
+        description="Assessment of how well the documents cover the query requirements"
+    )
+    
+    missing_information: str = Field(
+        default="",
+        description="Description of key information missing from documents (if any)"
     )
 
 
 structured_output = llm.with_structured_output(EvaluateDocs)
 
-system = """You are an expert evaluator who professionally assesses whether the documents retrieved from the vector database can answer the user's query. \n 
-    Your task is to determine whether the content of the documents provided below is sufficient to answer the user's query, grade it as relevant. \n
-    Instructions: 
-    1. Carefully review the content of the documents and evaluate whether they are appropriate for answering the user's query.
-    2. When evaluating the sufficiency of the documents, consider the following factors:
-    - a: Assess whether the main topics or aspects of the documents are relevant to answering the user's query.
-    - b: The depth and specificity of the information provided in the documents to answer the user's query.
-    - c: Complementary or overlapping information within the documents.
-    - d: Compare the user's query directly with the main topics and key points of the documents to ensure they are closely aligned.
-    3. Provide a binary assessment of whether the combined information from the documents is sufficient to answer the user's query.
-        - yes: The documents are relevant to the user's query and provide enough information to answer it satisfactorily
-        - no: The documents do not provide enough relevant information to adequately answer the user's query.
-    4. Remember to assess the document's relevance strictly in the context of the user's specific query.
-    
-    Please provide your evaluation of whether the retrieved documents are sufficient to answer the user's query, using 'yes' or 'no'. """
+system = """You are an expert document relevance evaluator for a RAG (Retrieval-Augmented Generation) system. Your role is to assess whether retrieved documents contain sufficient information to answer a user's query effectively.
+
+EVALUATION FRAMEWORK:
+
+1. TOPICAL RELEVANCE:
+   - Do the documents directly address the main subject of the query?
+   - Are the key concepts and themes aligned with what the user is asking?
+
+2. INFORMATION SUFFICIENCY:
+   - Is there enough detail to provide a comprehensive answer?
+   - Are specific facts, data, or examples present when needed?
+   - Can the query be answered without requiring external knowledge?
+
+3. INFORMATION QUALITY:
+   - Is the information accurate and credible?
+   - Are there conflicting statements within the documents?
+   - Is the information current and relevant to the query context?
+
+4. COMPLETENESS ASSESSMENT:
+   - Does the document set cover all aspects of the query?
+   - Are there obvious gaps in information that would prevent a complete answer?
+
+SCORING CRITERIA:
+- Score 'yes' if documents provide sufficient, relevant information to answer the query satisfactorily
+- Score 'no' if documents lack key information, are off-topic, or insufficient for a complete answer
+
+ADDITIONAL REQUIREMENTS:
+- Provide a relevance score (0.0-1.0) indicating match quality
+- Assess coverage of query requirements
+- Identify any missing critical information
+
+Be thorough but efficient in your evaluation. Focus on practical utility for answer generation."""
 
 evaluate_prompt = ChatPromptTemplate.from_messages(
     [
         ("system", system),
-        ("human", "Retrieved document: \n\n {document} \n\n User question: {question}"),
+        ("human", """Please evaluate whether the retrieved documents are sufficient to answer the user's query.
+
+USER QUERY:
+{question}
+
+RETRIEVED DOCUMENTS:
+{document}
+
+EVALUATION REQUIRED:
+1. Primary Score: 'yes' if documents are sufficient, 'no' if insufficient
+2. Relevance Score: 0.0-1.0 rating of how well documents match the query
+3. Coverage Assessment: How well do the documents address the query requirements?
+4. Missing Information: What key information (if any) is missing for a complete answer?
+
+Provide your comprehensive evaluation based on the framework above."""),
     ]
 )
 
