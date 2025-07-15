@@ -143,8 +143,12 @@ class RAGWorkflow:
         print(f"Evaluating {len(documents)} documents, online_search: {online_search}")
         
         filtered_docs = []
+        document_evaluations = []
+        
         for document in documents:
             response = evaluate_docs.invoke({"question": question, "document": document.page_content})
+            document_evaluations.append(response)
+            
             result = response.score
             if result.lower() == "yes":
                 filtered_docs.append(document)
@@ -152,7 +156,17 @@ class RAGWorkflow:
                 online_search = True
         
         print(f"Filtered to {len(filtered_docs)} relevant documents, online_search: {online_search}")
-        return {"documents": filtered_docs, "question": question, "online_search": online_search}
+        
+        # Determine search method
+        search_method = "online" if online_search else "documents"
+        
+        return {
+            "documents": filtered_docs, 
+            "question": question, 
+            "online_search": online_search,
+            "search_method": search_method,
+            "document_evaluations": document_evaluations
+        }
     
     def _generate_answer(self, state: GraphState):
         """Generate an answer based on the retrieved documents"""
@@ -183,8 +197,13 @@ class RAGWorkflow:
         else:
             documents = [results]
             print(f"Using only online search results")
-            
-        return {"documents": documents, "question": question}
+        
+        # Update search method to indicate online search was used
+        return {
+            "documents": documents, 
+            "question": question, 
+            "search_method": "online"
+        }
     
     def _any_doc_irrelevant(self, state):
         """Determine whether any document is irrelevant, triggering online search"""
@@ -201,15 +220,20 @@ class RAGWorkflow:
         solution = state["solution"]
 
         print("Checking document relevance...")
-        score = document_relevance.invoke(
+        doc_relevance_score = document_relevance.invoke(
             {"documents": documents, "solution": solution}
         )
 
-        if score.binary_score:
+        if doc_relevance_score.binary_score:
             print("Document relevance check passed")
             print("Checking question relevance...")
-            score = question_relevance.invoke({"question": question, "solution": solution})
-            if score.binary_score:
+            question_relevance_score = question_relevance.invoke({"question": question, "solution": solution})
+            
+            # Store the evaluation scores in state
+            state["document_relevance_score"] = doc_relevance_score
+            state["question_relevance_score"] = question_relevance_score
+            
+            if question_relevance_score.binary_score:
                 print("ROUTING DECISION: Going to 'END' (Answers Question)")
                 return "Answers Question"
             else:
@@ -217,4 +241,6 @@ class RAGWorkflow:
                 return "Question not addressed"
         else:
             print("ROUTING DECISION: Going to 'Generate Answer' (Hallucinations detected)")
+            # Store the document relevance score even if it failed
+            state["document_relevance_score"] = doc_relevance_score
             return "Hallucinations detected"
