@@ -36,6 +36,17 @@ Here is what happens when you use this application and the process is actually q
 
 *Ask questions and get answers*
 
+- **View Evaluation Results**:
+  - See detailed system information about how your answer was generated
+  - Review evaluation scores for document relevance, question matching, and answer grounding
+  - Understand which documents were used and their relevance scores
+  - View confidence levels and reasoning behind each evaluation
+  - Check if online search was used or if answers came from your documents
+
+![Evaluation Results](screenshots/evaluations.png)
+
+*Comprehensive evaluation metrics and system transparency*
+
 - **Smart Answer Generation**:
   - Uses LangGraph to make sure answers are relevant and accurate
   - Has built-in checks to catch when something might be wrong
@@ -90,7 +101,15 @@ The application works in a few simple steps, but there is complex processing hap
    - If one method does not work, it tries another approach
    - You always know where your answer originated
 
-5. **Seeing What's Happening** (Optional):
+5. **Evaluation and Transparency**:
+   - After generating an answer, the system provides detailed evaluation metrics
+   - Shows document relevance scores and which documents were most helpful
+   - Displays question-answer matching quality and completeness ratings
+   - Provides confidence levels and reasoning for each evaluation
+   - Indicates whether online search was used or if answers came from your documents
+   - All evaluation data is presented in easy-to-read tables for full transparency
+
+6. **Seeing What's Happening** (Optional):
    - If you set up LangSmith, you can see exactly what the app is doing
    - Great for understanding the process or fixing issues
    - Shows you timing and performance info
