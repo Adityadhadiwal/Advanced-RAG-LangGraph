@@ -1,3 +1,17 @@
+"""
+Document evaluation chain for LangGraph RAG workflows
+
+This module handles document relevance evaluation as part of the LangGraph RAG
+pipeline. It determines whether retrieved documents contain enough relevant
+information to answer a user's question effectively.
+
+The evaluation chain is a key component in LangGraph RAG systems, providing
+quality gates that prevent irrelevant documents from being used for answer
+generation. This improves the overall quality of RAG responses.
+
+Used within the LangGraph workflow to make routing decisions about whether
+to proceed with document-based answers or fall back to online search.
+"""
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 from langchain_openai import ChatOpenAI
@@ -9,7 +23,13 @@ load_dotenv()
 llm = ChatOpenAI(temperature=0)
 
 class EvaluateDocs(BaseModel):
-    """Model for document evaluation results"""
+    """
+    Document evaluation results for LangGraph RAG workflows
+    
+    This model structures the evaluation results when assessing whether
+    retrieved documents are sufficient for answering a question. Used
+    throughout the LangGraph RAG workflow for routing decisions.
+    """
     
     score: str = Field(
         description="Whether documents are relevant to the question - 'yes' if sufficient, 'no' if insufficient"

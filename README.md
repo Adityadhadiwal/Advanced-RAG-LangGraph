@@ -3,7 +3,9 @@
 
 This is a web application that allows you to upload documents and ask questions about them. It is built with LangGraph, Streamlit, and ChromaDB. If your document does not contain the answer, it automatically searches online to help you out.
 
-Think of it as having a really smart assistant that can read through your files and provide answers, with built-in safeguards to ensure the responses are accurate and not fabricated.
+This project demonstrates how to build a RAG (Retrieval-Augmented Generation) system using LangGraph for workflow management. LangGraph helps orchestrate the different steps in the RAG pipeline, from document processing to answer generation, with built-in error handling and state management.
+
+If you're looking to understand how LangGraph works with RAG systems, this implementation shows practical patterns for building document question-answering applications with proper workflow orchestration.
 
 ## How It Works
 
@@ -63,6 +65,26 @@ Here is what happens when you use this application and the process is actually q
 
 ---
 
+## LangGraph RAG Implementation
+
+This project shows how to implement RAG with LangGraph in a practical way. LangGraph handles the workflow orchestration, managing the different steps like document retrieval, relevance checking, and answer generation.
+
+### Why LangGraph for RAG?
+- **State Management**: LangGraph manages the application state as it moves through different processing steps
+- **Conditional Logic**: The workflow can decide whether to search documents or go online based on what it finds
+- **Error Handling**: Built-in mechanisms to handle failures and try alternative approaches
+- **Extensibility**: Easy to add new steps or modify the workflow as needed
+
+### Key LangGraph RAG Patterns Used:
+- Document evaluation before answer generation
+- Conditional routing between different search methods
+- Multi-step validation and quality checks
+- State transitions with proper error recovery
+
+If you want to learn LangGraph RAG implementation, this codebase provides a complete working example with real-world patterns.
+
+---
+
 ## File Types We Support
 
 You can upload these types of files:
@@ -113,7 +135,18 @@ The application works in a few simple steps, but there is complex processing hap
    - If you set up LangSmith, you can see exactly what the app is doing
    - Great for understanding the process or fixing issues
    - Shows you timing and performance info
-   
+
+### LangGraph RAG Architecture
+
+The workflow uses LangGraph to manage the entire RAG pipeline:
+
+- **State Management**: All data flows through a defined GraphState that tracks questions, documents, and evaluation results
+- **Conditional Routing**: The system decides whether to use document search or online search based on what it finds
+- **Error Recovery**: If document search fails, the workflow automatically tries online search
+- **Multi-Step Validation**: Each step includes quality checks before moving to the next stage
+- **Extensible Design**: Easy to add new evaluation steps or modify the workflow logic
+
+This LangGraph RAG implementation provides a good foundation for building more complex document processing systems.
 
 ---
 
@@ -284,7 +317,7 @@ LANGCHAIN_PROJECT=Advanced-RAG-LangGraph
 
 This project uses the MIT License - check out the [LICENSE](LICENSE) file for the details.
 
----
+
 
 
 

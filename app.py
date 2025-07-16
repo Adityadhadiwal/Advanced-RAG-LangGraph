@@ -1,7 +1,21 @@
 
 """
 Advanced RAG System with LangGraph
-Streamlit application for intelligent document search and analysis
+
+This is the main Streamlit application that demonstrates how to build a RAG system
+using LangGraph for workflow management. The application handles document uploads,
+processes questions, and generates answers using a LangGraph-orchestrated pipeline.
+
+Key components:
+- Document processing and chunking
+- LangGraph workflow for RAG operations
+- Question answering with fallback to online search
+- Evaluation and quality assessment
+- Real-time user interface
+
+This implementation shows practical patterns for building RAG applications with
+LangGraph, including state management, conditional routing, and error handling.
+Good for understanding how LangGraph works with RAG systems.
 """
 import streamlit as st
 
