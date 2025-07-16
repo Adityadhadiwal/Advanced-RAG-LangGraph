@@ -1,5 +1,18 @@
 """
 RAG workflow management using LangGraph
+
+This module implements the core RAG workflow using LangGraph's state management
+and graph-based orchestration. It handles the complete flow from question
+processing to answer generation, with built-in evaluation and fallback mechanisms.
+
+The LangGraph workflow includes:
+- Document retrieval and relevance checking
+- Conditional routing between local and online search
+- Multi-step answer generation and validation
+- Error handling and recovery strategies
+
+This demonstrates practical LangGraph RAG patterns for building robust
+question-answering systems with proper workflow orchestration.
 """
 import streamlit as st
 from langchain_core.documents import Document
@@ -15,7 +28,21 @@ from config import TAVILY_SEARCH_RESULTS
 
 
 class RAGWorkflow:
-    """Manages the RAG workflow using LangGraph"""
+    """
+    Manages the RAG workflow using LangGraph
+    
+    This class orchestrates the complete RAG pipeline using LangGraph's state
+    management system. It handles document processing, question answering,
+    and evaluation with proper error handling and fallback mechanisms.
+    
+    The workflow demonstrates key LangGraph RAG patterns:
+    - State-based workflow management
+    - Conditional routing based on document availability
+    - Multi-step evaluation and quality checks
+    - Dynamic fallback to online search when needed
+    
+    Good for understanding how to build RAG systems with LangGraph in practice.
+    """
     
     def __init__(self):
         self.graph = None
