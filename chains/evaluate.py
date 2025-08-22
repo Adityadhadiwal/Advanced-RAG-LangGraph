@@ -14,13 +14,13 @@ to proceed with document-based answers or fall back to online search.
 """
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
-from langchain_openai import ChatOpenAI
+##from langchain_openai import ChatOpenAI
 
 from dotenv import load_dotenv
 
-load_dotenv()
+##load_dotenv()
 
-llm = ChatOpenAI(temperature=0)
+##llm = ChatOpenAI(temperature=0)
 
 class EvaluateDocs(BaseModel):
     """
