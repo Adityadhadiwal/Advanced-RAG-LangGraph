@@ -175,7 +175,7 @@ Before you start, make sure you have these things:
 ### Step 1: Download the Code
 
 ```bash
-git clone https://github.com/chitralputhran/Advanced-RAG-LangGraph.git
+git clone https://github.com/Adityadhadiwal/Advanced-RAG-LangGraph.git
 cd Advanced-RAG-LangGraph
 ```
 
